@@ -21,24 +21,24 @@ public class UserController {
     @GetMapping("/")
     public String getAllUsers(ModelMap model) {
         model.addAttribute("users", userService.getAllUsers());
-        return "index";
+        return "users/index";
     }
 
     @GetMapping("/{id}")
     public String getUser(@PathVariable("id") int id, ModelMap model) {
         model.addAttribute("user", userService.getUser(id));
-        return "user";
+        return "users/user";
     }
 
     @GetMapping("/new_user")
     public String getAddUser(@ModelAttribute("user") User user) {
-        return "new_user";
+        return "users/new_user";
     }
 
     @PostMapping("/")
     public String addUser(@ModelAttribute("user") User user, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "new_user";
+            return "users/new_user";
         }
         userService.addUser(user);
         return "redirect:/";
@@ -51,17 +51,18 @@ public class UserController {
     }
 
     @GetMapping("/{id}/edit_user")
-    public String editUserForm(ModelMap model, @PathVariable("id") int id) {
+    public String editUserForm(ModelMap model, @PathVariable("id") Integer id) {
         model.addAttribute("user", userService.getUser(id));
-        return "edit_user";
+        return "users/edit_user";
     }
 
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public String editUser(@ModelAttribute("user") User user,
                            BindingResult bindingResult, @PathVariable("id") int id) {
         if (bindingResult.hasErrors())
-            return "/edit_user";
+            return "users/edit_user";
         userService.updateUser(id, user);
         return "redirect:/";
     }
+
 }
